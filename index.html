@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beispiel Liste</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            height: 100vh;
+            margin: 20px;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .table-container {
+            max-height: 400px;
+            overflow-y: auto;
+            width: 50%;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f0f0f0;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        tr.selected {
+            background-color: #d0e0ff;
+        }
+        #actionButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            display: none;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const entries = ["Eintrag 1", "Eintrag 2", "Eintrag 3", "Eintrag 4", "Eintrag 5", "Eintrag 6", "Eintrag 7", "Eintrag 8", "Eintrag 9", "Eintrag 10"];
+            const tableContainer = document.createElement("div");
+            tableContainer.className = "table-container";
+            const table = document.createElement("table");
+            const headerRow = document.createElement("tr");
+            const headerCell = document.createElement("th");
+            headerCell.textContent = "Eintrag";
+            headerRow.appendChild(headerCell);
+            table.appendChild(headerRow);
+
+            entries.forEach(entry => {
+                const row = document.createElement("tr");
+                const cell = document.createElement("td");
+                cell.textContent = entry;
+                row.appendChild(cell);
+                table.appendChild(row);
+
+                row.addEventListener("click", function() {
+                    const selectedRow = document.querySelector("tr.selected");
+                    if (selectedRow) {
+                        selectedRow.classList.remove("selected");
+                    }
+                    row.classList.add("selected");
+                    document.getElementById("actionButton").style.display = "block";
+                });
+            });
+
+            tableContainer.appendChild(table);
+            document.body.appendChild(tableContainer);
+
+            const actionButton = document.createElement("button");
+            actionButton.id = "actionButton";
+            actionButton.textContent = "Aktion";
+            actionButton.disabled = true;
+            actionButton.onclick = function() {
+                const selectedRow = document.querySelector("tr.selected td");
+                if (selectedRow) {
+                    const selectedText = selectedRow.textContent;
+                    window.location.href = `detail.html?entry=${encodeURIComponent(selectedText)}`;
+                }
+            };
+            document.body.appendChild(actionButton);
+
+            document.addEventListener("click", function(event) {
+                if (!event.target.closest("tr")) {
+                    const selectedRow = document.querySelector("tr.selected");
+                    if (selectedRow) {
+                        selectedRow.classList.remove("selected");
+                    }
+                    actionButton.style.display = "none";
+                }
+            });
+
+            table.addEventListener("click", function(event) {
+                if (event.target.closest("tr")) {
+                    actionButton.disabled = false;
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Beispiel Liste</h1>
+</body>
+</html>
