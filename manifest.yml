@@ -1,0 +1,6 @@
+---
+applications:
+- name: dein-app-name
+  memory: 512M
+  instances: 1
+  path: .
